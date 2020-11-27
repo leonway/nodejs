@@ -22,34 +22,34 @@
 // const fn = compose(add,square,double)
 // console.log(fn(1,2));
 
-const delay =()=> new Promise((res)=>{
-  setTimeout(() => {
-    res()
-  }, 2000);
-})
+// const delay =()=> new Promise((res)=>{
+//   setTimeout(() => {
+//     res()
+//   }, 2000);
+// })
 
-async function fn1(next) {
-  console.log('fn1');
-  await next()
-  console.log('end fn1');
-}
+// async function fn1(next) {
+//   console.log('fn1');
+//   await next()
+//   console.log('end fn1');
+// }
 
-// ()=>fn2(next)
-// ()=>fn3(next)
-fn3
-async function fn2(next) {
-  console.log('fn2');
-  await delay()
-  await next()
-  console.log('end fn2');
-}
+// // ()=>fn2(next)
+// // ()=>fn3(next)
+// fn3
+// async function fn2(next) {
+//   console.log('fn2');
+//   await delay()
+//   await next()
+//   console.log('end fn2');
+// }
 
-async function fn3(next) {
-  console.log('fn3');
-}
+// async function fn3(next) {
+//   console.log('fn3');
+// }
 
-function compose(middlewares) {
-  return function () {
+module.exports = function compose(middlewares) {
+  return function (ctx) {
     return dispatch(0)
     function dispatch(i) {
       let fn = middlewares[i]
@@ -57,7 +57,7 @@ function compose(middlewares) {
         return Promise.resolve()
       }
       return Promise.resolve(
-        fn(function next(params) {
+        fn(ctx,function next(params) {
           return dispatch(i+1)
         })
       )
@@ -65,10 +65,10 @@ function compose(middlewares) {
   }
 }
 
-const fn = compose([fn1,fn2,fn3])
+// const fn = compose([fn1,fn2,fn3])
 
-const next = ()=>new Promise((res)=>{
-  console.log('next');
-  res()
-})
-console.log(fn());
+// const next = ()=>new Promise((res)=>{
+//   console.log('next');
+//   res()
+// })
+// console.log(fn());

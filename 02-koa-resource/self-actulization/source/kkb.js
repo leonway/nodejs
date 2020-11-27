@@ -2,21 +2,24 @@ const http = require('http')
 const context = require('./context')
 const request = require('./request')
 const response = require('./response')
+const compose = require('./compose')
 
 class Kkb {
   constructor(){
-
+    this.callbacks = []
   }
   use(cb){
-    this.callback = cb
+    this.callbacks.push(cb)
   }
   listen(...args){
-    const server = http.createServer((req,res)=>{
+    const server = http.createServer(async (req,res)=>{
       //创建上下文
       const ctx = this.createContext(req,res)
-      this.callback(ctx)
+      const fn = compose(this.callbacks)
+
+      await fn(ctx)
       //响应
-      console.log(ctx);
+      // console.log(ctx);
       res.end(ctx.body)
     })
     server.listen(...args)
