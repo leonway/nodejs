@@ -1,32 +1,16 @@
-const path = require('path')
-const fs = require('fs')
-
-const parser = async (originPath)=>{
-  return new Promise((res,rej)=>{
-    let data = Buffer.from('')
-    const filePath = path.resolve(originPath)
-    try {
-      if(fs.existsSync(filePath)){
-        const stream = fs.createReadStream(filePath)
-        stream.on('data',chunk=>{
-          data += chunk
-        })
-        stream.on('close',()=>{
-          // console.log('---data-------');
-          // console.log(data);
-          // console.log('----data.toString()-----');
-          // console.log(data.toString());
-          res(JSON.parse(data))          
-        })
+const compose = (fns) =>{
+  return ()=>{
+    return dispatch(0)
+    function dispatch(i) {
+      const fn = fns[i]
+      if(!fn){
+        return Promise.resolve()
       }
-    } catch (e) {
-      console.log('parser error');
-      console.log(e);
-      rej(e)
+      return Promise.resolve(fn(()=>dispatch(i+1)))
     }
-  })
-}
+  }
+} 
 
 module.exports = {
-  parser
+  compose
 }
