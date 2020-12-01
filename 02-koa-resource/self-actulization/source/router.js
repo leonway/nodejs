@@ -3,10 +3,10 @@ class Router {
     this.table = new Map()
   }
   get(path,middleWare){
-    setTable('get',path,middleWare)
+    this.setTable('get',path,middleWare)
   }
   post(path,middleWare){
-    setTable('post',path,middleWare)
+    this.setTable('post',path,middleWare)
   }
   setTable(method,path,middleWare){
     this.table.set({
@@ -16,6 +16,27 @@ class Router {
     middleWare
     )
   }
+  routes(){
+    return async(ctx,next)=>{
+      const { url, method } = ctx
+      let fn
+      for (const [key,value] of this.table.entries()) {
+        if(key.path===url&&key.method===method){
+          fn = value
+        }
+      }
+      console.log({
+        path:url,method
+      });
+      console.log(this.table);
+      console.log(fn);
+      if(!fn){
+        ctx.body='not fund'
+      }else{
+        fn(ctx,next)
+      }
+    }
+  }
 }
 
-module.exports Router
+module.exports=Router

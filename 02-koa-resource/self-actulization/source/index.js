@@ -9,7 +9,9 @@
 // server.listen(3000,()=>{
 //   console.log("server start 3000");
 // })
+const path = require('path')
 const Kkb = require('./kkb')
+// const Kkb = require('koa')
 const app = new Kkb()
 
 
@@ -45,11 +47,15 @@ const app = new Kkb()
 //   console.log(`请求${ctx.url} 耗时${end-start}ms`,);
 // })
 // app.use((ctx,next)=>{
-//   ctx.body="fdsafsa"
+//   // console.log(ctx);
+//   ctx.body = {
+//         title:'koa2 json'
+//       }
 // })
 
 //以下是测试路由
-const router = require('./router')()
+const KoaRouter = require('./router')
+const router = new KoaRouter()
 router.get('/string',async(ctx,next)=>{
   ctx.body = 'koa2 string'
 })
@@ -59,6 +65,10 @@ router.get('/json',async(ctx,next)=>{
   }
 })
 app.use(router.routes())
+
+//以下是测试静态资源文件
+// console.log(require('./static')(__dirname+'/sample'));
+// app.use(require('./static')(path.resolve('../sample')))
 
 app.listen(3000,()=>{
   console.log("server start 3000");
