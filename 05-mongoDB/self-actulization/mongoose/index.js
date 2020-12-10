@@ -5,7 +5,7 @@ mongoose.connect('mongodb://localhost:27017/test',{useNewUrlParser:true,useUnifi
 
 const conn = mongoose.connection
 
-conn.on('error',()=>console.error('连接数据库是吧'))
+conn.on('error',()=>console.error('连接数据库失败'))
 conn.once('open',async()=>{
   //2.定义一个Schema - Table
   const Schema = mongoose.Schema({
