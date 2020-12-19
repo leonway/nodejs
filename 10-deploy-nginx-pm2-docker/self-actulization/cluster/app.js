@@ -9,6 +9,6 @@ if(!module.parent){
   server.listen(3000,()=>{
     console.log('server listen at 3000');
   })
-}else{
+}else{ 
   module.exports = server
 }
